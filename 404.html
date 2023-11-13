@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta name="viewport"
+        content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no,viewport-fit=cover,minimal-ui">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <title>加载中...</title>
+    <script src="https://lib.baomitu.com/axios/0.27.2/axios.min.js"></script>
+    <script src="https://lib.baomitu.com/jquery/1.10.2/jquery.min.js"></script>
+    <style>
+        .message-container {
+            position: relative;
+            z-index: 9999;
+        }
+
+        .message-box {
+            background-color: #fef0f0 !important;
+            width: 200px;
+            text-align: center;
+            margin-top: 5px;
+            border: 1px solid #fde2e2;
+            padding: 10px 10px 14px 10px;
+            font-size: 16px;
+            border-radius: 5px;
+            color: #f56c6c;
+        }
+
+        .closeWrapper {
+            position: relative;
+            width: 20px;
+            height: 20px;
+            top: 24px;
+            right: 20px;
+        }
+
+        .close {
+            position: relative;
+            top: 2px;
+            left: -10px;
+            display: inline-block;
+            width: 14px;
+            height: 14px;
+            border: 1px solid #f56c6c;
+            border-radius: 20px;
+            background-color: #f56c6c !important;
+        }
+
+        .close::before,
+        .close::after {
+            position: absolute;
+            content: ' ';
+            background-color: whitesmoke;
+            color: whitesmoke;
+            width: 0px;
+            height: 6px;
+            border: 1px solid;
+            left: 7px;
+            top: 3px;
+        }
+
+        .close::before {
+            transform: rotate(45deg);
+        }
+
+        .close::after {
+            transform: rotate(-45deg);
+        }
+
+
+        * {
+            margin: 0;
+            padding: 0;
+            font-family: "Microsoft Yahei", 微软雅黑, "Helvetica Neue", Helvetica, "Hiragino Sans GB", "WenQuanYi Micro Hei", sans-serif;
+            line-height: 1.5715;
+            font-feature-settings: 'tnum', "tnum";
+            font-size: 1.12em;
+            letter-spacing: 1px;
+        }
+
+        body {
+            background-color: #f7f7f7;
+        }
+
+        .card-box {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+        }
+
+        .card {
+            background-color: white;
+            width: 85%;
+            height: 560px;
+            margin: 0 auto;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 2px 8px -2px rgb(0 0 0 / 5%), 0 1px 4px -1px rgb(25 15 15 / 7%), 0 0 1px 0 rgb(0 0 0 / 8%);
+        }
+
+        .card div {
+            background-color: white;
+        }
+
+        .center {
+            margin: 0 auto;
+        }
+
+        #title {
+            color: #FF0000;
+            font-weight: 500;
+            line-height: 44.3123px;
+            height: 44.3123px;
+        }
+
+        .font-custom {}
+
+        button {
+            width: 70%;
+            background: #07C160;
+            font-size: 18px;
+            height: 48px;
+            padding: 2px 15px 6px 15px;
+            border-radius: 5px;
+            outline: none;
+            position: relative;
+            display: inline-block;
+            font-weight: 400;
+            white-space: nowrap;
+            text-align: center;
+            box-shadow: 0.5px 0.5px 4px #999999;
+            font-weight: bold;
+            border: 1px solid transparent;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
+            line-height: 1.5714285714285714;
+            color: #fff;
+            letter-spacing: 2px;
+        }
+
+        input {
+            padding: 0;
+            outline: none;
+            position: relative;
+            display: inline-flex;
+            width: 95%;
+            min-width: 0;
+            padding: 4px 11px;
+            color: rgba(0, 0, 0, 0.88);
+            font-size: 18px;
+            line-height: 1.9714285714285714;
+            background-color: #f7f7f7;
+            background-image: none;
+            border-width: 1px;
+            border-style: solid;
+            border-color: #d9d9d9;
+            border-radius: 2px;
+            transition: all 0.2s;
+        }
+
+        input:focus,
+        input:hover {
+            border-color: #4096ff;
+            box-shadow: 0 0 0 2px rgb(5, 145, 255/10%);
+            border-inline-end-width: 1px;
+            outline: 0;
+        }
+
+        ::-webkit-input-placeholder {
+            /* WebKit, Blink, Edge */
+            color: darkgray;
+        }
+
+        :-moz-placeholder {
+            /* Mozilla Firefox 4 to 18 */
+            color: darkgray;
+        }
+
+        ::-moz-placeholder {
+            /* Mozilla Firefox 19+ */
+            color: darkgray;
+        }
+
+        :-ms-input-placeholder {
+            /* Internet Explorer 10-11 */
+            color: darkgray;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="card-box" style="display: none;">
+        <div class="card">
+            <img src="https://img1.imgtp.com/2023/10/10/Cu9srPMD.gif" style="width: 100px; height: 100px;" alt="">
+            <div id="title"></div>
+            <input type="text" style="margin-top: 20px;" maxlength="4" oninput="checkCode(this.value)"
+                placeholder="输入密码即可进入">
+            <div id="msg"
+                style="position: absolute; left: 50%; transform: translateX(-50%); background-color: transparent;">
+            </div>
+            <img src="https://img1.imgtp.com/2023/10/10/l2D8RRNI.gif" style="width: 40px; height: 35px; margin-top: 50px;" alt="">
+            <div class="center" style="margin-top: 15px;">
+                <button id="btn1" class="font-custom" onclick="routeToUrl(0)">点击获取密码</button>
+                <button id="btn2" style="background: #f4f5f7;color: #07C160;margin: 30px 0 0 0;"
+                    onclick="routeToUrl(1)">点击进入吃瓜群</button>
+                <button id="btn3" style="background: #fdc308;color: darkslategrey;margin: 30px 0 0 0;"
+                    onclick="routeToUrl(2)">点击联系客服</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        const url_list = []
+        var url;
+        var pwd;
+
+        var link = window.location.href;
+        var index = link.lastIndexOf("\/");
+        var id = link.substring(index + 1, link.length).replace('/', '');
+
+        function getSiteConfig(id) {
+            const config = {
+                url: 'https://tz.jxqhdm.cn/api.php?act=geturl2&t=' + id,
+                method: 'get'
+            }
+            return axios(config)
+        }
+
+        function getQueryString(name) {
+            let reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+            let r = window.location.search.substr(1).match(reg);
+            let context = "";
+            if (r != null)
+                context = decodeURIComponent(r[2]);
+            reg = null;
+            r = null;
+            return context == null || context == "" || context == "undefined" ? "" : context;
+        }
+
+        getSiteConfig(id).then(res => {
+            res = res.data
+            if (res.code === 1) {
+                console.log(res)
+
+                url = res.url
+                pwd = res.pwd
+                if (pwd != '') {
+                    $(".card-box").show()
+                    document.getElementById('title').innerText = res.remarks
+                    document.getElementsByTagName('title')[0].innerText = res.remarks
+                    url_list.push(res.xcx)
+                    url_list.push(res.url2)
+                    url_list.push(res.url3)
+                } else {
+                    window.location.href = url
+                }
+            }
+        })
+
+        function routeToUrl(index) {
+            console.log(url_list[index])
+            if (url_list.length > 0) {
+                window.open(url_list[index])
+            }
+        }
+
+        function checkCode(value) {
+            if (value === '') {
+                return
+            }
+            if (value == pwd) {
+                window.location.href = url
+            }
+        }
+    </script>
+
+
+</body>
+
+</html>
